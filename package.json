@@ -4,12 +4,31 @@
   "description": "options module for twiz-client",
   "main": "src/Options.js",
   "scripts": {
-    "test": "tap -Rspec test/*.js "
+    "lint": "eslint src/Options",
+    "tap": "tap -Rspec test/*.js ",
+    "test": "nyc npm run tap && nyc report --reporter=text-lcov | coveralls",
+    "testLocal": "nyc npm run tap && nyc report --reporter=text-lcov"
   },
-  "author": "github.com/gits2501",
-  "license": "MIT",
   "dependencies": {
-    "tap": "^11.1.3",
-    "twiz-client-utils": "https://github.com/gits2501/twiz-client-utils.git"
-  }
+    "twiz-client-utils": "https://github.com/gits2501/twiz-client-utils"
+  },
+  "devDependencies": {
+    "coveralls": "^3.0.2",
+    "eslint": "^4.19.1",
+    "nyc": "^11.9.0",
+    "tap": "^11.1.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gits2501/twiz-client-options.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gits2501/twiz-client-options/issues"
+  },
+  "author": {
+    "name": "gits2501",
+    "url": "https://github.com/gits2501",
+    "email": "canidomath@yahoo.com"
+  },
+  "license": "MIT"
 }
