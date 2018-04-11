@@ -71,10 +71,10 @@
       CustomError.call(this);          // add CustomError feature
       this.addCustomErrors( {          // set errors for this module
 
-         callbackNotSet:   "You must provide a callback url to which users are redirected.",
+         redirectionUrlNotSet: "You must provide a redirection_url to which users will be redirected.",
          noStringProvided: "You must provide a string as an argument." ,
          serverUrlNotSet:  "You must proivide server url to which request will be sent",
-         optionNotSet:     " option must be set",
+         optionNotSet:     "Check that \'method\' and \'path\' are set."
       })
 
       
@@ -97,7 +97,7 @@
                case "new_window":      // object that holds properties for making new window(tab/popup)
                  this.newWindow = {};
                  for(var data in temp){
-
+                    if(temp.hasOwnProperty(data))
                     switch(data){
                        case "name":
                          this.newWindow[data] = temp[data];
@@ -113,9 +113,6 @@
                break;
                case "session_data":
                  this.session_data = temp;
-               break;
-               case "version":
-                 this.oauth.version(temp);
                break;
                case "options":
                  for (var opt in temp){
@@ -138,7 +135,7 @@
                        break; 
                        case 'beforeSend':
                            this.UserOptions[opt] = temp[opt]; 
-                       break
+                       break;
                     } 
                  }
                break;
@@ -157,7 +154,8 @@
                      break;
                    } 
                  }
-                case "methods":
+               break;
+               case "methods":
                   for(var leg in temp){           // check for legs in provided 'methods' object
                     switch(leg){
                       case "request_token":       // if leg is request, update with the new http method
@@ -171,6 +169,7 @@
                       break;
                     } 
                   }
+               break;
             }
          }
 
@@ -186,15 +185,16 @@
    }
 
    Options.prototype.checkRedirectionCallback = function (){ // checks for the url user is returned to
-      if(!this[this.leg[0]].oauth_callback) throw this.CustomError('callbackNotSet');
+      if(!this[this.leg[0]].oauth_callback) throw this.CustomError('redirectionUrlNotSet');
                                                                 // throw an error if one is not set
    }
 
-   Options.prototype.checkApiOptions = function(){
+   Options.prototype.checkApiOptions = function(){ 
       for(var opt in this.UserOptions) {
-          if(opt === 'path' && opt == 'method' ){ // mandatory params set by user
+          if(opt === 'path' || opt == 'method' ){  // mandatory params set by user
             if(!this.UserOptions[opt])             // check that is set
-               throw this.CustomError( opt + 'optionNotSet')
+               throw this.CustomError('optionNotSet')
+            
           }
       }     
    }

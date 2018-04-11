@@ -4,7 +4,7 @@
   "description": "options module for twiz-client",
   "main": "src/Options.js",
   "scripts": {
-    "test": "tap -Rspec test/*.js "
+    "test": "tap -Rspec --cov test/*.js "
   },
   "author": "github.com/gits2501",
   "license": "MIT",
