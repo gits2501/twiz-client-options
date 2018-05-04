@@ -2,7 +2,7 @@ var test = require('tap').test;
 var Options = require('../src/Options');
 
 
-var mockOptions = {
+var mockOptions = {  
 
   leg: [ 'request_token', 'authorize', 'access_token' ],
   httpMethods: { request_token: 'POST', authorize: 'GET', access_token: 'POST' },
@@ -61,7 +61,7 @@ test('Options', function(t){
  }); 
  test('user specified options', function(t){ // check that user options are in place
     t.plan(1)
-    t.deepEqual(ro.userOptions, mockOptions.userOptions, 'user options supported')
+    t.deepEqual(ro.UserOptions, mockOptions.UserOptions, 'user options supported')
  }); 
  
  test('twitter url parts',function(t){  // check partitioning of twitter url
@@ -159,22 +159,34 @@ test('Options', function(t){
     };
     
     test('set user params', function(t){ // user proveided params need to be in place
-      t.plan(5);
+      t.plan(6);
       
       (function mockPeerDependency(){
          ro[ro.leg[0]] = {};
          ro[ro.leg[0]].oauth_callback = '';  // make property that is avalable upstream in perDependecy module
       })()
      
-      ro.setUserParams(args);
+      ro.setUserParams(args);                // set parameters user provided
       
       t.equals(ro.server_url, args.server_url, 'server url');
       t.equals(ro[ro.leg[0]].oauth_callback, args.redirection_url, 'redirection url');
       t.deepEqual(ro.newWindow, args.new_window, 'new window');
       t.deepEqual(ro.callback_func, args.callback_func, 'callback function');
-      t.deepEqual(ro.session_data, args.session_data, 'session data')
+      t.deepEqual(ro.session_data, args.session_data, 'session data');
+
+      args.urls = {                        // add urls object to test changing of default twitter oauth endpoints
+          request_token: 'https://api.twitter.com/oauth/request_token2',
+          authorize: 'https://api.twitter.com/oauth/authenticate',
+          access_token: 'https://api.twitter.com/oauth/access_token24'
+      }  
       
+      ro.setUserParams(args);               // set with updated args
+
+      t.deepEquals(ro.absoluteUrls, args.urls, 'can change all 3 endpoints');
+      
+       
     })    
+   
    
     test('set user options (api options)', function(t){ // user options need to be in place
        t.plan(6);
@@ -209,6 +221,7 @@ test('Options', function(t){
        
        t.throws(ro.checkUserParams.bind(ro, ro.leg[0]), { name: 'optionNotSet'}, 'method missing, throw error ')
     })    
+
 
     test('access token leg (must have params)', function(t){ // params needed for access token leg
        t.plan(3);

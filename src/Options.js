@@ -117,13 +117,13 @@
                case "options":
                  for (var opt in temp){
                     switch (opt){
-                       case "method":
+                       case "method": 
                           this.UserOptions[opt] = temp[opt];          
                        break;
                        case "path":
                           this.UserOptions[opt] = temp[opt];          
                        break;
-                       case "params":
+                       case "params": 
                           this.UserOptions[opt] = temp[opt];
                           this.UserOptions.paramsEncoded = "?" + formEncode(temp[opt], true);          
                        break;
@@ -138,7 +138,7 @@
                        break;
                     } 
                  }
-               break;
+               break; 
                case "urls":              // when we get urls object, we check for urls provided
                                          // for each leg (part) of the 3-leg authentication.
                  for(var leg in temp){
@@ -154,21 +154,6 @@
                      break;
                    } 
                  }
-               break;
-               case "methods":
-                  for(var leg in temp){           // check for legs in provided 'methods' object
-                    switch(leg){
-                      case "request_token":       // if leg is request, update with the new http method
-                        this.httpMethods[leg] = temp[leg];
-                      break;
-                      case "authorize":          
-                        this.httpMethods[leg] = temp[leg];
-                      break;
-                      case "access_token":         
-                        this.httpMethods[leg] = temp[leg];
-                      break;
-                    } 
-                  }
                break;
             }
          }
